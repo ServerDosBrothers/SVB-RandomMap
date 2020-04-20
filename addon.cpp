@@ -83,7 +83,7 @@ public:
 
 ICvar *g_pCVar = nullptr;
 
-void RemoveOption(std::string &str, std::string_view find)
+void RemoveOption(std::string &str, const std::string &find)
 {
 	size_t it = str.find(find);
 	if(it != std::string::npos) {
@@ -99,7 +99,7 @@ void RemoveOption(std::string &str, std::string_view find)
 	}
 }
 
-void RemoveSwitch(std::string &str, std::string_view find)
+void RemoveSwitch(std::string &str, const std::string &find)
 {
 	size_t it = str.find(find);
 	if(it != std::string::npos) {
