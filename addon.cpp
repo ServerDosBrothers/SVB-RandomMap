@@ -82,6 +82,35 @@ public:
 
 ICvar *g_pCVar = nullptr;
 
+void RemoveOption(std::string &str, std::string_view find)
+{
+	size_t it = str.find(find);
+	if(it != std::string::npos) {
+		str.erase(it, it+find.length()+1);
+		while(str[it] != ' ') {
+			str.erase(it);
+		}
+		if(str[it] == ' ') {
+			str.erase(it);
+		} else if(str[it] == '\0') {
+			str.erase(it-1);
+		}
+	}
+}
+
+void RemoveSwitch(std::string &str, std::string_view find)
+{
+	size_t it = str.find(find);
+	if(it != std::string::npos) {
+		str.erase(it, it+find.length());
+		if(str[it] == ' ') {
+			str.erase(it);
+		} else if(str[it] == '\0') {
+			str.erase(it-1);
+		}
+	}
+}
+
 bool CEmptyServerPlugin::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn gameServerFactory)
 {
 	g_pCVar = (ICvar *)interfaceFactory(CVAR_INTERFACE_VERSION, nullptr);
@@ -101,28 +130,11 @@ bool CEmptyServerPlugin::Load(CreateInterfaceFn interfaceFactory, CreateInterfac
 	std::string old_cmdline = pCommandLine->GetCmdLine();
 	std::string new_cmdline = old_cmdline;
 	
-	size_t it = new_cmdline.find("-map");
-	if(it != std::string::npos) {
-		new_cmdline.erase(it, it+5);
-		while(new_cmdline[it] != ' ') {
-			new_cmdline.erase(it);
-		}
-		if(new_cmdline[it] == ' ') {
-			new_cmdline.erase(it);
-		} else if(new_cmdline[it] == '\0') {
-			new_cmdline.erase(it-1);
-		}
-	}
+	RemoveOption(new_cmdline, "-map");
+	RemoveOption(new_cmdline, "+map");
 	
-	it = new_cmdline.find("+randommap");
-	if(it != std::string::npos) {
-		new_cmdline.erase(it, it+10);
-		if(new_cmdline[it] == ' ') {
-			new_cmdline.erase(it);
-		} else if(new_cmdline[it] == '\0') {
-			new_cmdline.erase(it-1);
-		}
-	}
+	RemoveSwitch(new_cmdline, "+randommap");
+	RemoveSwitch(new_cmdline, "-randommap");
 	
 	std::ifstream infile = std::ifstream("tf/addons/random_map.txt");
 	if (infile.is_open()) {
