@@ -75,6 +75,8 @@ public:
 	}
 };
 
+ICvar *g_pCVar = nullptr;
+
 bool CEmptyServerPlugin::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn gameServerFactory)
 {
 	g_pCVar = (ICvar *)interfaceFactory(CVAR_INTERFACE_VERSION, nullptr);
