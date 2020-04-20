@@ -73,6 +73,11 @@ public:
 			pCvar->m_bHasMax = false;
 		}
 	}
+	
+	static ConCommandBase *GetNext(ConCommandBase *pCmd)
+	{
+		return pCmd->m_pNext;
+	}
 };
 
 ICvar *g_pCVar = nullptr;
@@ -84,7 +89,11 @@ bool CEmptyServerPlugin::Load(CreateInterfaceFn interfaceFactory, CreateInterfac
 	ConCommandBase *pCVar = g_pCVar->GetCommands();
 	while(pCVar) {
 		CCvar::Unlock(pCVar);
+	#ifndef TIER1_BUGGED
 		pCVar = pCVar->GetNext();
+	#else
+		pCVar = CCvar::GetNext(pCVar);
+	#endif
 	}
 	
 	ICommandLine *pCommandLine = CommandLine();
