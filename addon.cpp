@@ -62,6 +62,7 @@ extern "C" __attribute__((visibility ("default"))) void *CreateInterface(const c
 
 class CCvar
 {
+public:
 	static void Unlock(ConCommandBase *pCmd)
 	{
 		pCmd->m_nFlags &= ~(FCVAR_DEVELOPMENTONLY|FCVAR_HIDDEN|FCVAR_NOT_CONNECTED|FCVAR_SPONLY);
@@ -76,9 +77,9 @@ class CCvar
 
 bool CEmptyServerPlugin::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn gameServerFactory)
 {
-	g_pCvar = (ICvar *)interfaceFactory(CVAR_INTERFACE_VERSION);
+	g_pCVar = (ICvar *)interfaceFactory(CVAR_INTERFACE_VERSION, nullptr);
 	
-	ConCommandBase *pCVar = g_pCvar->GetCommands();
+	ConCommandBase *pCVar = g_pCVar->GetCommands();
 	while(pCVar) {
 		CCvar::Unlock(pCVar);
 		pCVar = pCVar->GetNext();
