@@ -87,14 +87,14 @@ void RemoveOption(std::string &str, const std::string &find)
 {
 	size_t it = str.find(find);
 	if(it != std::string::npos) {
-		str.erase(it, it+find.length()+1);
+		str.erase(it, find.length()+1);
 		while(str[it] != ' ') {
-			str.erase(it);
+			str.erase(it, 1);
 		}
 		if(str[it] == ' ') {
-			str.erase(it);
+			str.erase(it, 1);
 		} else if(str[it] == '\0') {
-			str.erase(it-1);
+			str.erase(it-1, 1);
 		}
 	}
 }
@@ -103,11 +103,11 @@ void RemoveSwitch(std::string &str, const std::string &find)
 {
 	size_t it = str.find(find);
 	if(it != std::string::npos) {
-		str.erase(it, it+find.length());
+		str.erase(it, find.length());
 		if(str[it] == ' ') {
-			str.erase(it);
+			str.erase(it, 1);
 		} else if(str[it] == '\0') {
-			str.erase(it-1);
+			str.erase(it-1, 1);
 		}
 	}
 }
